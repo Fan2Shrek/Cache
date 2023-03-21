@@ -1,0 +1,17 @@
+{
+    "name": "sruuua/cache",
+    "description": "Cache system for sruuua",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Sruuua\\Cache\\": ""
+        }
+    },
+    "authors": [
+        {
+            "name": "Fan2Shrek",
+            "email": "pierre27.ambroise@gmail.com"
+        }
+    ],
+    "require": {}
+}
