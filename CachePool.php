@@ -157,8 +157,8 @@ class CachePool implements CachePoolInterface
         try {
             $fileName = self::DIRECTORY . $cache->getKey() . '.php';
             $file = fopen($fileName, 'w') or touch($fileName);
-            $content = str_replace("'", "\'", $content);
-            $content = str_replace('{content}', serialize($cache), self::INIT_FILE);
+            $content = str_replace("'", "\'", serialize($cache));
+            $content = str_replace('{content}', $content, self::INIT_FILE);
             fwrite($file, $content);
 
             return true;
