@@ -12,7 +12,7 @@ use Exception;
 class CachePool implements CachePoolInterface
 {
     private const DIRECTORY = '../temp/';
-    private const INIT_FILE = "<?php\n\nreturn `{content}`;\n";
+    private const INIT_FILE = "<?php\n\nreturn '{content}';\n";
 
     /**
      * @var Cache[]
@@ -158,6 +158,7 @@ class CachePool implements CachePoolInterface
             $fileName = self::DIRECTORY . $cache->getKey() . '.php';
             $file = fopen($fileName, 'w') or touch($fileName);
             $content = str_replace('{content}', serialize($cache), self::INIT_FILE);
+            $content = str_replace("'", "\'", $content);
             fwrite($file, $content);
 
             return true;
