@@ -13,5 +13,12 @@
             "email": "pierre27.ambroise@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/yaml": "^6.2"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Sruuua\\Cache\\Installer\\Installer::postInstall"
+        ]
+    }
 }
