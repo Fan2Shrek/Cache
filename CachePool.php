@@ -12,7 +12,7 @@ use Exception;
 
 class CachePool implements CachePoolInterface
 {
-    private static string $directory;
+    private static string $directory = '../temp';
 
     private const INIT_FILE = "<?php\n\nreturn '{content}';\n";
 
