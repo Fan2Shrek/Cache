@@ -33,7 +33,7 @@ class CachePool implements CachePoolInterface
         $this->cacheMap = array();
         Cache::setPool($this);
 
-        $this->parseYaml();
+        if (file_exists('../config/cache.yml')) $this->parseYaml();
         if (!is_dir(self::$directory)) {
             mkdir(self::$directory);
         }
