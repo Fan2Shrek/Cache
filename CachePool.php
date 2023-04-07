@@ -5,14 +5,18 @@ namespace Sruuua\Cache;
 use Sruuua\Cache\Exception\InvalidArgumentException;
 use Sruuua\Cache\Interface\CacheItemInterface;
 use Sruuua\Cache\Interface\CachePoolInterface;
+use Symfony\Component\Yaml\Yaml;
 use Exception;
 
 // namespace Sruuua\Cache;
 
 class CachePool implements CachePoolInterface
 {
-    private const DIRECTORY = '../temp/';
+    private static string $directory;
+
     private const INIT_FILE = "<?php\n\nreturn '{content}';\n";
+
+    private bool $isEnable = true;
 
     /**
      * @var Cache[]
@@ -29,14 +33,22 @@ class CachePool implements CachePoolInterface
         $this->cacheMap = array();
         Cache::setPool($this);
 
-        if (!is_dir(self::DIRECTORY)) {
-            mkdir(self::DIRECTORY);
+        $this->parseYaml();
+        if (!is_dir(self::$directory)) {
+            mkdir(self::$directory);
         }
+    }
+
+    public function parseYaml()
+    {
+        $yaml = Yaml::parseFile('../config/cache.yml');
+        $this->isEnable = (bool)$yaml['cache']['enable'] ?? true;
+        self::$directory = $yaml['cache']['folder'] ?? '../temp';
     }
 
     public static function getDirectory()
     {
-        return self::DIRECTORY;
+        return self::$directory;
     }
 
     /**
@@ -131,7 +143,7 @@ class CachePool implements CachePoolInterface
 
         try {
             if ($this->hasItem($key)) {
-                unlink(self::DIRECTORY . $hashedKey . '.php');
+                unlink(self::$directory . $hashedKey . '.php');
                 unset($this->cacheMap[$hashedKey]);
             }
         } catch (Exception $e) {
@@ -155,7 +167,7 @@ class CachePool implements CachePoolInterface
     public function save(CacheItemInterface $cache)
     {
         try {
-            $fileName = self::DIRECTORY . $cache->getKey() . '.php';
+            $fileName = self::$directory . $cache->getKey() . '.php';
             $file = fopen($fileName, 'w') or touch($fileName);
             $content = str_replace("'", "\'", serialize($cache));
             $content = str_replace('{content}', $content, self::INIT_FILE);
@@ -185,5 +197,13 @@ class CachePool implements CachePoolInterface
         }
 
         return $success;
+    }
+
+    /**
+     * Get the value of isEnable
+     */
+    public function IsEnable()
+    {
+        return $this->isEnable;
     }
 }

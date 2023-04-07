@@ -9,7 +9,8 @@ class CacheBuilder
     public function __construct()
     {
         $this->cachePool = new CachePool();
-        $this->registerExistingCache();
+        if ($this->cachePool->isEnable())
+            $this->registerExistingCache();
     }
 
     public static function buildFromFiles(): CachePool
