@@ -2,7 +2,7 @@
 
 ## Sruuua cache system
 
-The Sruuua cache library follow [PSR 6](https://link-url-here.org)
+The Sruuua cache library follow [PSR 6](https://www.php-fig.org/psr/psr-6/)
 The default cache folder is ../temp/
 
 ## Configure the package with
