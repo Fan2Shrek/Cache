@@ -12,7 +12,7 @@ use Exception;
 
 class CachePool implements CachePoolInterface
 {
-    private static string $directory = '../temp';
+    private static string $directory = '../temp/';
 
     private const INIT_FILE = "<?php\n\nreturn '{content}';\n";
 
@@ -33,7 +33,7 @@ class CachePool implements CachePoolInterface
         $this->cacheMap = array();
         Cache::setPool($this);
 
-        if (file_exists('../config/cache.yml')) $this->parseYaml();
+        if (file_exists('../config/cache.yaml')) $this->parseYaml();
         if (!is_dir(self::$directory)) {
             mkdir(self::$directory);
         }
@@ -41,7 +41,7 @@ class CachePool implements CachePoolInterface
 
     public function parseYaml()
     {
-        $yaml = Yaml::parseFile('../config/cache.yml');
+        $yaml = Yaml::parseFile('../config/cache.yaml');
         $this->isEnable = (bool)$yaml['cache']['enable'] ?? true;
         self::$directory = $yaml['cache']['folder'] ?? '../temp';
     }
