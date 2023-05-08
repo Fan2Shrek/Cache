@@ -123,18 +123,18 @@ class CachePool implements CachePoolInterface
         return isset($this->cacheMap[$hashedKey]);
     }
 
-    /***
-     * To do
-     */
     public function clear()
     {
-        try {
-            $this->cacheMap = [];
-
-            return true;
-        } finally {
-            return false;
+        foreach ($this->cacheMap as $key => $cache) {
+            $this->deleteItem($key);
         }
+
+        if ((count(scandir(self::$directory)) == 2)) {
+            rmdir(self::$directory);
+            return true;
+        }
+
+        return false;
     }
 
     public function deleteItem($key)
@@ -144,6 +144,9 @@ class CachePool implements CachePoolInterface
         try {
             if ($this->hasItem($key)) {
                 unlink(self::$directory . $hashedKey . '.php');
+                unset($this->cacheMap[$hashedKey]);
+            } elseif (file_exists(self::$directory . $key . '.php')) {
+                unlink(self::$directory . $key . '.php');
                 unset($this->cacheMap[$hashedKey]);
             }
         } catch (Exception $e) {
